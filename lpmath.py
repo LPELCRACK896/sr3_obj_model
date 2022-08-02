@@ -9,7 +9,6 @@ def identidad(dimension :int):
         raise Exception(f"Dimension invalida para matriz: {dimension}")
     return [[1 if (j==i) else 0 for j in range(dimension)] for i in range(dimension)]  
 
-
 def validMatrix(matriz):
     if  type(matriz)!=list:
         return False
@@ -33,6 +32,9 @@ def allowMult(matriz1, matriz2):
 def multTwoMatrixes(matriz1, matriz2):
     resultado = [[0 for r in range(len(matriz1))] for a in range(len(matriz2[0]))]
     if allowMult(matriz1, matriz2):
+        if len(matriz2[0])==1:
+            return matriz_por_vector(matriz1, matriz2)
+
         for i in range(len(matriz1)):
             multiplo1 = []
             for a in matriz1[i]:
@@ -47,6 +49,15 @@ def multTwoMatrixes(matriz1, matriz2):
                 resultado[i][j] = res
         return resultado
     return
+
+def matriz_por_vector(matriz, vector):
+    resultado = []
+    for fila in matriz:
+        res = 0
+        for elemnt in range(len(fila)):
+            res += (fila[elemnt]*vector[elemnt])
+        resultado.append(res)
+    return resultado
 
 def multMatrixes(*matrices):
     cantidad_matrices = len(matrices)

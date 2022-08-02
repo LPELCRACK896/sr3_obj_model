@@ -2,7 +2,6 @@ from re import L
 import struct 
 from collections import namedtuple
 from obj import Obj
-import numpy as np
 import random
 import lpmath as lpm
 from  math import pi, cos, tan, sin 
@@ -62,7 +61,7 @@ class Renderer(object):
     
     def glCreateObjectMatrix(self, translate = V3(0, 0, 0), rotate  = V3(0, 0, 0), scale = V3(1, 1, 1)):
         
-        translation = np.matrix([
+        translation = lpm.matriz([
             [1, 0, 0, translate.x],
             [0, 1, 0, translate.y],
             [0, 0, 1, translate.z],
@@ -92,19 +91,20 @@ class Renderer(object):
             [0, 0, 0, 1]
         ])
         rotation = lpm.multMatrixes(R_x, R_y, R_z)
-        scaleMat = np.matrix([
+        scaleMat = lpm.matriz([
             [scale.x, 0, 0, 0],
             [0, scale.y, 0, 0],
             [0, 0, scale.z, 0],
             [0, 0, 0, 1]
             ])
-        return translation * rotation * scaleMat
+        return lpm.multMatrixes(translation, rotation, scaleMat)
 
     def glTransform(self, vertex, matrix):
         v = V4(vertex[0], vertex[1], vertex[2], 1)
 
-        vt = matrix @ v
-        vt = vt.tolist()[0]
+        #vt = matrix @ v
+        vt = lpm.matriz_por_vector(matrix, v)
+        #vt = vt.tolist()[0]
         vf = V3( vt[0]/vt[3],  vt[1]/vt[3], vt[2]/vt[3])
         
         return vf
